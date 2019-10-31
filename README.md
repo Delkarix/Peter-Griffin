@@ -1,2 +1,2 @@
 # Peter-Griffin
-Jesus Christ what have I done
+Open Task Manager to stop it (`CTRL` + `SHIFT` + `ESC`).
