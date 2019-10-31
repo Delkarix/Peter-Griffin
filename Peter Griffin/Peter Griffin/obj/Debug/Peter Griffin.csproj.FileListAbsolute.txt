@@ -1,0 +1,9 @@
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\bin\Debug\Peter Griffin.exe.config
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\bin\Debug\Peter Griffin.exe
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\bin\Debug\Peter Griffin.pdb
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\obj\Debug\Peter Griffin.csprojAssemblyReference.cache
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\obj\Debug\Peter_Griffin.Properties.Resources.resources
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\obj\Debug\Peter Griffin.csproj.GenerateResource.cache
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\obj\Debug\Peter Griffin.csproj.CoreCompileInputs.cache
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\obj\Debug\Peter Griffin.exe
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\obj\Debug\Peter Griffin.pdb
