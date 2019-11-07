@@ -1,7 +1,8 @@
 using System;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Threading;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
+using System.Text;
 
 namespace Peter_Griffin
 {
@@ -34,28 +35,68 @@ namespace Peter_Griffin
         [DllImport("gdi32.dll")]
         static extern bool StretchBlt(IntPtr hdcDest, int nXOriginDest, int nYOriginDest, int nWidthDest, int nHeightDest, IntPtr hdcSrc, int nXOriginSrc, int nYOriginSrc, int nWidthSrc, int nHeightSrc, uint dwRop);
 
-        [StructLayout(LayoutKind.Sequential)]
-        struct BITMAP
-        {
-            public int Type;
-            public int Width;
-            public int Height;
-            public int WidthBytes;
-            public ushort Planes;
-            public ushort BitsPixel;
-            public IntPtr Bits;
-        }
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr CreateWindowExA(int dwExStyle, [MarshalAs(UnmanagedType.LPStr)] string lpClassName, [MarshalAs(UnmanagedType.LPStr)] string lpWindowName, int dwStyle, int x, int y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam);
 
-        struct POINT
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32")]
+        public static extern bool EnumChildWindows(IntPtr hwndParent, EnumWindowsProc lpEnumFunc, string lParam);
+
+        [DllImport("user32")]
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, string lParam);
+
+        [DllImport("user32")]
+        public static extern IntPtr GetDesktopWindow();
+        
+        [DllImport("user32")]
+        public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+        [DllImport("user32")]
+        public static extern int GetWindowTextLength(IntPtr hWnd);
+
+        public delegate bool EnumWindowsProc(IntPtr hWnd, string lParam);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
         {
             public int x;
             public int y;
         }
 
-        static void Glitch()
+        [StructLayout(LayoutKind.Sequential)]
+        public struct BITMAP
         {
-            int width = GetSystemMetrics(0);
-            int height = GetSystemMetrics(1);
+            public int bmType;
+            public int bmWidth;
+            public int bmHeight;
+            public int bmWidthBytes;
+            public int bmPlanes;
+            public int bmBitsPixel;
+            public IntPtr bmBits;
+        }
+
+        public static int width = GetSystemMetrics(0);
+        public static int height = GetSystemMetrics(1);
+
+        public static bool callback(IntPtr hwnd, string lParam)
+        {
+            int length = GetWindowTextLength(hwnd);
+            StringBuilder lpString = new StringBuilder(length + 1);
+            GetWindowText(hwnd, lpString, lpString.Capacity);
+            string text = lpString.ToString();
+
+            // Will not redraw the text if it is already "hey lois". This should hopefully increase the speed of the code.
+            if (text != "hey lois")
+            {
+                SendMessage(hwnd, 12, IntPtr.Zero, "hey lois");
+            }
+            return true;
+        }
+
+        public static void Peter()
+        {
             Random RNG = new Random();
             while (true)
             {
@@ -65,10 +106,10 @@ namespace Peter_Griffin
                     {
                         IntPtr hdc = GetDC(proc.MainWindowHandle);
                         IntPtr hdcMem = CreateCompatibleDC(hdc);
-                        IntPtr hbitmap = Properties.Resources._220px_Peter_Griffin_bmp.GetHbitmap();
+                        IntPtr hBitmap = Properties.Resources._220px_Peter_Griffin_bmp.GetHbitmap();
 
-                        IntPtr oldBitmap = SelectObject(hdcMem, hbitmap);
-                        GetObject(hbitmap, Marshal.SizeOf<BITMAP>(), out BITMAP bmp);
+                        IntPtr oldBitmap = SelectObject(hdcMem, hBitmap);
+                        GetObject(hBitmap, Marshal.SizeOf<BITMAP>(), out BITMAP bmp);
 
                         for (int i = 0; i < 2; i++)
                         {
@@ -76,25 +117,38 @@ namespace Peter_Griffin
                             POINT point2 = new POINT() { x = RNG.Next(0, width), y = RNG.Next(0, height) };
                             POINT point3 = new POINT() { x = RNG.Next(0, width), y = RNG.Next(0, height) };
 
-                            PlgBlt(hdc, new POINT[] { point1, point2, point3 }, hdcMem, 0, 0, bmp.Width, bmp.Height, IntPtr.Zero, 0, 0);
-                            StretchBlt(hdc, RNG.Next(0, width), RNG.Next(0, height), RNG.Next(0, width), RNG.Next(0, height), hdcMem, 0, 0, bmp.Width, bmp.Height, 0x00C000CA); // MERGECOPY
-                            StretchBlt(hdc, RNG.Next(0, width), RNG.Next(0, height), RNG.Next(0, width), RNG.Next(0, height), hdcMem, 0, 0, bmp.Width, bmp.Height, 0x00BB0226); // MERGEPAINT
-                            StretchBlt(hdc, RNG.Next(0, width), RNG.Next(0, height), RNG.Next(0, width), RNG.Next(0, height), hdcMem, 0, 0, bmp.Width, bmp.Height, 0x008800C6); // SRCAND
-                            StretchBlt(hdc, RNG.Next(0, width), RNG.Next(0, height), RNG.Next(0, width), RNG.Next(0, height), hdcMem, 0, 0, bmp.Width, bmp.Height, 0x00440328); // SRCERASE
+                            PlgBlt(hdc, new POINT[] { point1, point2, point3 }, hdcMem, 0, 0, bmp.bmWidth, bmp.bmHeight, IntPtr.Zero, 0, 0);
+                            StretchBlt(hdc, RNG.Next(0, width), RNG.Next(0, height), RNG.Next(0, width), RNG.Next(0, height), hdcMem, 0, 0, bmp.bmWidth, bmp.bmHeight, 0x00C000CA); // MERGECOPY
+                            StretchBlt(hdc, RNG.Next(0, width), RNG.Next(0, height), RNG.Next(0, width), RNG.Next(0, height), hdcMem, 0, 0, bmp.bmWidth, bmp.bmHeight, 0x00BB0226); // MERGEPAINT
+                            StretchBlt(hdc, RNG.Next(0, width), RNG.Next(0, height), RNG.Next(0, width), RNG.Next(0, height), hdcMem, 0, 0, bmp.bmWidth, bmp.bmHeight, 0x008800C6); // SRCAND
+                            StretchBlt(hdc, RNG.Next(0, width), RNG.Next(0, height), RNG.Next(0, width), RNG.Next(0, height), hdcMem, 0, 0, bmp.bmWidth, bmp.bmHeight, 0x00440328); // SRCERASE
                         }
 
                         SelectObject(hdcMem, oldBitmap);
                         DeleteDC(hdcMem);
-                        DeleteObject(hbitmap);
+                        DeleteObject(hBitmap);
                     }
                 }
             }
         }
 
-        static void Main()
+        public static void hey_lois()
         {
-            Thread th = new Thread(Glitch);
+            Random RNG = new Random();
+            while (true)
+            {
+                Thread.Sleep(500);
+                CreateWindowExA(0, "Static", "hey lois", /*WS_VISIBLE*/0x10000000, RNG.Next(0, width), RNG.Next(0, height), 0, 0, IntPtr.Zero, IntPtr.Zero, GetWindowLong(IntPtr.Zero, -6), IntPtr.Zero);
+                EnumChildWindows(GetDesktopWindow(), callback, null);
+            }
+        }
+
+        public static void Main(string[] args)
+        {
+            Thread th = new Thread(Peter);
+            Thread th2 = new Thread(hey_lois);
             th.Start();
+            th2.Start();
             while (true)
             {
                 if (Process.GetProcessesByName("taskmgr").Length != 0)

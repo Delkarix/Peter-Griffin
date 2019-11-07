@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{101D77FA-A8EB-4524-9AAE-E782A4D7A466}</ProjectGuid>
+    <ProjectGuid>{6DA904B1-A8D3-4298-B348-8033466A29FD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>Peter_Griffin</RootNamespace>
     <AssemblyName>Peter Griffin</AssemblyName>
@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
