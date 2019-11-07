@@ -7,3 +7,7 @@ C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\obj\Debug\Peter Gr
 C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\obj\Debug\Peter Griffin.csproj.CoreCompileInputs.cache
 C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\obj\Debug\Peter Griffin.exe
 C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\obj\Debug\Peter Griffin.pdb
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\hey lois\Peter Griffin.exe.config
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\hey lois\Peter Griffin.exe
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\hey lois\Peter Griffin.pdb
+C:\Users\catteralldm\source\repos\Peter Griffin\Peter Griffin\hey lois\hey lois.xml

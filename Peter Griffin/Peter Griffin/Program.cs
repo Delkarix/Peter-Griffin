@@ -100,18 +100,19 @@ namespace Peter_Griffin
             Random RNG = new Random();
             while (true)
             {
-                foreach (Process proc in Process.GetProcesses())
+                Process[] processes = Process.GetProcesses();
+                for (int i = 0; i < processes.Length; i++)
                 {
-                    if (proc.MainWindowHandle != IntPtr.Zero)
+                    if (processes[i].MainWindowHandle != IntPtr.Zero)
                     {
-                        IntPtr hdc = GetDC(proc.MainWindowHandle);
+                        IntPtr hdc = GetDC(processes[i].MainWindowHandle);
                         IntPtr hdcMem = CreateCompatibleDC(hdc);
                         IntPtr hBitmap = Properties.Resources._220px_Peter_Griffin_bmp.GetHbitmap();
 
                         IntPtr oldBitmap = SelectObject(hdcMem, hBitmap);
                         GetObject(hBitmap, Marshal.SizeOf<BITMAP>(), out BITMAP bmp);
 
-                        for (int i = 0; i < 2; i++)
+                        //for (int j = 0; i < 2; i++)
                         {
                             POINT point1 = new POINT() { x = RNG.Next(0, width), y = RNG.Next(0, height) };
                             POINT point2 = new POINT() { x = RNG.Next(0, width), y = RNG.Next(0, height) };
@@ -135,11 +136,20 @@ namespace Peter_Griffin
         public static void hey_lois()
         {
             Random RNG = new Random();
+
             while (true)
             {
-                Thread.Sleep(500);
+                Thread.Sleep(250);
                 CreateWindowExA(0, "Static", "hey lois", /*WS_VISIBLE*/0x10000000, RNG.Next(0, width), RNG.Next(0, height), 0, 0, IntPtr.Zero, IntPtr.Zero, GetWindowLong(IntPtr.Zero, -6), IntPtr.Zero);
+            }
+        }
+
+        public static void hey_lois2()
+        {
+            while (true)
+            {
                 EnumChildWindows(GetDesktopWindow(), callback, null);
+                Thread.Sleep(1000);
             }
         }
 
@@ -147,10 +157,13 @@ namespace Peter_Griffin
         {
             Thread th = new Thread(Peter);
             Thread th2 = new Thread(hey_lois);
+            Thread th3 = new Thread(hey_lois2);
             th.Start();
             th2.Start();
+            th3.Start();
             while (true)
             {
+
                 if (Process.GetProcessesByName("taskmgr").Length != 0)
                 {
                     Process.GetCurrentProcess().Kill();
